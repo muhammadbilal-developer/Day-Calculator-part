@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contador de Dias — Calculadora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section class="cd" id="calculator">
+  <div class="cd-card" id="cdForm">
+
+    <!-- ================= TABS ================= -->
+    <div class="cd-tabs" role="tablist" aria-label="Modo de cálculo">
+      <span class="cd-tabs-pill" id="cdPill" aria-hidden="true"></span>
+      <button class="cd-tab is-active" role="tab" aria-selected="true"  data-tab="diff"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i> Diferença de Datas</button>
+      <button class="cd-tab"           role="tab" aria-selected="false" data-tab="addsub"><i class="fa-solid fa-plus-minus" aria-hidden="true"></i> Somar / Subtrair Dias</button>
+      <button class="cd-tab"           role="tab" aria-selected="false" data-tab="uteis"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> Dias Úteis</button>
+    </div>
+
+    <!-- ================= PANEL: DIFERENÇA ================= -->
+    <div class="cd-panel is-open" data-panel="diff" role="tabpanel">
+      <div class="cd-grid2">
+        <div class="cd-field">
+          <label class="cd-label" for="dfStart"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Data Inicial</label>
+          <input type="text" id="dfStart" class="cd-input" placeholder="DD/MM/AAAA" inputmode="numeric" maxlength="10" autocomplete="off">
+          <div class="cd-chips">
+            <button type="button" class="cd-chip" data-target="dfStart" data-shift="-7">-7 dias</button>
+            <button type="button" class="cd-chip" data-target="dfStart" data-shift="-30">-30 dias</button>
+            <button type="button" class="cd-chip" data-target="dfStart" data-shift="0">Hoje</button>
+          </div>
+        </div>
+        <div class="cd-field">
+          <label class="cd-label" for="dfEnd"><i class="fa-regular fa-calendar-check" aria-hidden="true"></i> Data Final</label>
+          <input type="text" id="dfEnd" class="cd-input" placeholder="DD/MM/AAAA" inputmode="numeric" maxlength="10" autocomplete="off">
+          <div class="cd-chips">
+            <button type="button" class="cd-chip" data-target="dfEnd" data-shift="7">+7 dias</button>
+            <button type="button" class="cd-chip" data-target="dfEnd" data-shift="30">+30 dias</button>
+            <button type="button" class="cd-chip" data-target="dfEnd" data-shift="0">Hoje</button>
+          </div>
+        </div>
+      </div>
+
+      <label class="cd-check">
+        <input type="checkbox" id="dfInclusive">
+        <span>Incluir a data final na contagem</span>
+      </label>
+      <p class="cd-hint">Padrão: dias corridos entre as datas (data final não contada).</p>
+
+      <p class="cd-error" id="dfError" role="alert"></p>
+      <button type="button" class="cd-submit" data-run="diff">Calcular Diferença <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+      <button type="button" class="cd-clear" data-clear="diff"><i class="fa-solid fa-eraser" aria-hidden="true"></i> Limpar Campos</button>
+    </div>
+
+    <!-- ================= PANEL: SOMAR / SUBTRAIR ================= -->
+    <div class="cd-panel" data-panel="addsub" role="tabpanel">
+      <div class="cd-grid2">
+        <div class="cd-field">
+          <label class="cd-label" for="asBase"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Data Base</label>
+          <input type="text" id="asBase" class="cd-input" placeholder="DD/MM/AAAA" inputmode="numeric" maxlength="10" autocomplete="off">
+          <div class="cd-chips">
+            <button type="button" class="cd-chip" data-target="asBase" data-shift="0">Hoje</button>
+            <button type="button" class="cd-chip" data-target="asBase" data-shift="1">Amanhã</button>
+          </div>
+        </div>
+        <div class="cd-field">
+          <label class="cd-label" for="asQty"><i class="fa-solid fa-hashtag" aria-hidden="true"></i> Número de Dias</label>
+          <input type="number" id="asQty" class="cd-input" placeholder="Ex.: 90" min="0" max="36500" step="1" inputmode="numeric">
+          <div class="cd-chips">
+            <button type="button" class="cd-chip" data-qty="30">30</button>
+            <button type="button" class="cd-chip" data-qty="60">60</button>
+            <button type="button" class="cd-chip" data-qty="90">90</button>
+          </div>
+        </div>
+      </div>
+
+      <span class="cd-label">Operação</span>
+      <div class="cd-seg" role="radiogroup" aria-label="Operação">
+        <button type="button" class="cd-seg-btn is-active" data-op="add" role="radio" aria-checked="true">Somar (data + X dias)</button>
+        <button type="button" class="cd-seg-btn" data-op="sub" role="radio" aria-checked="false">Subtrair (data − X dias)</button>
+      </div>
+
+      <label class="cd-check">
+        <input type="checkbox" id="asBiz">
+        <span>Contar apenas dias úteis (pular fins de semana e feriados)</span>
+      </label>
+      <p class="cd-hint">Útil para prazos bancários e processuais (D+2, D+3).</p>
+
+      <p class="cd-error" id="asError" role="alert"></p>
+      <button type="button" class="cd-submit" data-run="addsub">Calcular Nova Data <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+      <button type="button" class="cd-clear" data-clear="addsub"><i class="fa-solid fa-eraser" aria-hidden="true"></i> Limpar Campos</button>
+    </div>
+
+    <!-- ================= PANEL: DIAS ÚTEIS ================= -->
+    <div class="cd-panel" data-panel="uteis" role="tabpanel">
+      <div class="cd-grid2">
+        <div class="cd-field">
+          <label class="cd-label" for="duStart"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Data Inicial</label>
+          <input type="text" id="duStart" class="cd-input" placeholder="DD/MM/AAAA" inputmode="numeric" maxlength="10" autocomplete="off">
+          <div class="cd-chips">
+            <button type="button" class="cd-chip" data-target="duStart" data-shift="-7">-7 dias</button>
+            <button type="button" class="cd-chip" data-target="duStart" data-shift="-30">-30 dias</button>
+            <button type="button" class="cd-chip" data-target="duStart" data-shift="0">Hoje</button>
+          </div>
+        </div>
+        <div class="cd-field">
+          <label class="cd-label" for="duEnd"><i class="fa-regular fa-calendar-check" aria-hidden="true"></i> Data Final</label>
+          <input type="text" id="duEnd" class="cd-input" placeholder="DD/MM/AAAA" inputmode="numeric" maxlength="10" autocomplete="off">
+          <div class="cd-chips">
+            <button type="button" class="cd-chip" data-target="duEnd" data-shift="7">+7 dias</button>
+            <button type="button" class="cd-chip" data-target="duEnd" data-shift="30">+30 dias</button>
+            <button type="button" class="cd-chip" data-target="duEnd" data-shift="0">Hoje</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cd-field">
+        <label class="cd-label" for="duCountry"><i class="fa-solid fa-flag" aria-hidden="true"></i> Feriados do País</label>
+        <div class="cd-select-wrap">
+        <select id="duCountry" class="cd-input cd-select">
+          <option value="BR" selected>Brasil (12 feriados nacionais)</option>
+          <option value="PT">Portugal (13 feriados nacionais)</option>
+          <option value="US">Estados Unidos (11 feriados federais)</option>
+          <option value="NONE">Nenhum (apenas fins de semana)</option>
+        </select>
+        </div>
+      </div>
+
+      <label class="cd-check" id="duOptWrap">
+        <input type="checkbox" id="duCarnival">
+        <span id="duOptLabel">Incluir Carnaval (segunda e terça-feira)</span>
+      </label>
+      <p class="cd-hint" id="duOptHint">Pontos facultativos — desmarque se sua empresa não observa Carnaval.</p>
+
+      <p class="cd-error" id="duError" role="alert"></p>
+      <button type="button" class="cd-submit" data-run="uteis">Calcular Dias Úteis <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+      <button type="button" class="cd-clear" data-clear="uteis"><i class="fa-solid fa-eraser" aria-hidden="true"></i> Limpar Campos</button>
+    </div>
+
+  </div>
+
+  <!-- ================= RESULT ================= -->
+  <div class="cd-card cd-result" id="cdResult" hidden>
+    <button type="button" class="cd-back" id="cdBack">
+      <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Voltar à calculadora
+    </button>
+
+    <div class="cd-res-head">
+      <span class="cd-badge" id="cdBadge">Resultado</span>
+      <p class="cd-res-range" id="cdRange"></p>
+    </div>
+
+    <div class="cd-hero">
+      <span class="cd-hero-num" id="cdHeroNum">0</span>
+      <span class="cd-hero-cap" id="cdHeroCap">dias</span>
+    </div>
+    <p class="cd-hero-sub" id="cdHeroSub"></p>
+
+    <div class="cd-stats" id="cdStats"></div>
+
+    <div class="cd-holidays" id="cdHolidays" hidden>
+      <p class="cd-holidays-title">Feriados excluídos no período</p>
+      <ul class="cd-holidays-list" id="cdHolidaysList"></ul>
+    </div>
+
+    <p class="cd-note" id="cdNote"></p>
+
+    <div class="cd-actions">
+      <button type="button" class="cd-btn cd-btn--wa" id="cdWa">
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+        WhatsApp
+      </button>
+      <button type="button" class="cd-btn cd-btn--ghost" id="cdShare">
+        <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+        Compartilhar
+      </button>
+      <button type="button" class="cd-btn cd-btn--pdf" id="cdPdf">
+        <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+        Baixar PDF
+      </button>
+    </div>
+
+    <p class="cd-toast" id="cdToast" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="script.js" defer></script>
+</body>
+</html>
